@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BMI Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h2>BMI Calculator</h2>
+
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+
+    <div class="buttons-row">
+        <button onclick="login()">Login</button>
+        <button onclick="signup()">Signup</button>
+    </div>
+
+    <p id="loginMsg"></p>
+</div>
+
+<script>
+// Demo users
+let demoUsers = [
+    {username:"aafii", password:"2025"},
+    {username:"ram", password:"abc123"},
+    {username:"user1", password:"1234"}
+];
+let savedUsers = JSON.parse(localStorage.getItem("users")) || [];
+let users = [...demoUsers, ...savedUsers];
+localStorage.setItem("users", JSON.stringify(users));
+
+function signup(){
+    let u = username.value.trim();
+    let p = password.value.trim();
+    if(u==="" || p===""){
+        loginMsg.innerHTML="⚠ Enter username & password";
+        return;
+    }
+    let exists = users.find(user => user.username === u);
+    if(exists){
+        loginMsg.innerHTML="❌ Username already exists";
+        return;
+    }
+    users.push({username:u, password:p});
+    localStorage.setItem("users", JSON.stringify(users));
+    loginMsg.innerHTML="✅ Signup successful! Now login";
+    username.value="";
+    password.value="";
+}
+
+function login(){
+    let u = username.value.trim();
+    let p = password.value.trim();
+    let validUser = users.find(user => user.username === u && user.password === p);
+    if(validUser){
+        localStorage.setItem("healthmate_login","yes");
+        localStorage.setItem("current_user",u);
+        window.location.href="index.html";
+    }else{
+        loginMsg.innerHTML="❌ Invalid username or password";
+    }
+}
+</script>
+</body>
+</html>
